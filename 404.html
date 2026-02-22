@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MockOS — Page not found">
+  <meta name="theme-color" content="#0e0e12">
+  <title>MockOS — 404</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e12;
+      --surface: #16161e;
+      --surface2: #1e1e2a;
+      --border: #2a2a3a;
+      --accent: #7c6af7;
+      --accent2: #f76a8a;
+      --accent-rgb: 124, 106, 247;
+      --text: #e2e2f0;
+      --text-muted: #7a7a9a;
+      --radius: 10px;
+      --font-ui: 'Syne', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ambient background gradients */
+    .bg-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(124,106,247,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 80% 20%, rgba(247,106,138,0.1) 0%, transparent 60%);
+    }
+
+    /* Grid overlay */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image:
+        linear-gradient(rgba(124,106,247,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,106,247,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Main content */
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px;
+      max-width: 540px;
+      animation: fadeUp 0.6s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Error code */
+    .error-code {
+      font-family: var(--font-mono);
+      font-size: clamp(80px, 18vw, 160px);
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(var(--accent-rgb), 0.35));
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    /* Glitch flicker */
+    .error-code {
+      animation: glitch 4s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 94%, 100% { opacity: 1; }
+      95% { opacity: 0.6; transform: translateX(-2px); }
+      96% { opacity: 1; transform: translateX(2px); }
+      97% { opacity: 0.7; transform: translateX(0); }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 24px;
+    }
+
+    /* Message */
+    .message {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* Terminal-style window */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(255,255,255,0.04);
+      overflow: hidden;
+      margin-bottom: 36px;
+      text-align: left;
+    }
+
+    .terminal-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot.red    { background: #ff5f57; }
+    .dot.yellow { background: #febc2e; }
+    .dot.green  { background: #28c840; }
+
+    .terminal-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex: 1;
+      text-align: center;
+      margin-right: 42px;
+    }
+
+    .terminal-body {
+      padding: 16px 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    .terminal-body .prompt { color: var(--accent); }
+    .terminal-body .err    { color: var(--accent2); }
+    .terminal-body .info   { color: var(--text); }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--accent);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* Button */
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #a78bf9 30%));
+      color: white;
+      box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.4);
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.55);
+    }
+
+    .home-btn:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(var(--accent-rgb), 0.3);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      to   { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <div class="error-code">404</div>
+    <div class="subtitle">Process Not Found</div>
+
+    <div class="terminal">
+      <div class="terminal-titlebar">
+        <div class="terminal-dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <div class="terminal-title">mockos — terminal</div>
+      </div>
+      <div class="terminal-body">
+        <div><span class="prompt">user@mockos:~$</span> <span class="info">cd /requested/page</span></div>
+        <div><span class="err">error:</span> path does not exist in filesystem</div>
+        <div><span class="prompt">user@mockos:~$</span> <span class="info">suggest --fix</span></div>
+        <div><span class="info">→ Navigate back to the desktop</span></div>
+        <div><span class="prompt">user@mockos:~$</span><span class="cursor-blink"></span></div>
+      </div>
+    </div>
+
+    <a href="./" class="home-btn">◈ Return to Desktop</a>
+  </div>
+
+  <script>
+    // Generate floating particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+      if (Math.random() > 0.5) p.style.background = 'rgba(247,106,138,0.25)';
+      container.appendChild(p);
+    }
+  </script>
+
+</body>
+
+</html>
